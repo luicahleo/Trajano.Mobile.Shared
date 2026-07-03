@@ -49,6 +49,13 @@
             a mano) e IMCA construía su HttpClient manualmente en vez de vía factory.
             </summary>
         </member>
+        <member name="M:Trajano.Mobile.Shared.Http.IApiClient.GetRawAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Variantes que devuelven el HttpResponseMessage crudo, para llamadores que necesitan
+            inspeccionar el status code o el cuerpo de error manualmente en vez de deserializar
+            una respuesta tipada (ej. mostrar el mensaje de error real del servidor al usuario).
+            </summary>
+        </member>
         <member name="M:Trajano.Mobile.Shared.Http.IApiClient.DownloadBytesAsync(System.String)">
             <summary>
             Descarga un recurso binario (ej. una foto) desde una URL absoluta o relativa a la
@@ -64,6 +71,21 @@
         <member name="M:Trajano.Mobile.Shared.Http.IApiClient.ClearAuthToken">
             <summary>
             Limpia el token JWT configurado.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Http.IApiClient.GetBaseUrl">
+            <summary>
+            URL base (scheme://host:puerto, sin el path /api/) para construir URLs de recursos
+            que no viven bajo /api/ (ej. fotos servidas desde wwwroot).
+            </summary>
+        </member>
+        <member name="P:Trajano.Mobile.Shared.Http.IApiClient.Options">
+            <summary>
+            Opciones de serialización usadas internamente (PropertyNameCaseInsensitive=true,
+            necesario porque ICARUS.API devuelve camelCase por defecto). Expuestas para que los
+            llamadores de los métodos *RawAsync deserialicen manualmente con la misma
+            configuración, en vez de asumir (incorrectamente) las opciones por defecto de
+            System.Text.Json.
             </summary>
         </member>
         <member name="T:Trajano.Mobile.Shared.Logging.ISharedLogger">
@@ -117,6 +139,122 @@
         </member>
         <member name="P:Trajano.Mobile.Shared.Mvvm.BaseViewModel.ErrorMessage">
             <inheritdoc cref="F:Trajano.Mobile.Shared.Mvvm.BaseViewModel.errorMessage"/>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1">
+            <summary>
+            Abstracción del acceso a la base local (SQLite) que cada app implementa sobre su propio
+            repositorio, para que OfflineSyncEngine no conozca los detalles de persistencia de
+            ninguna de las dos apps. Cada app aporta solo el mapeo entre su entidad local (TLocal)
+            y estas operaciones.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.GetPendingAsync">
+            <summary>
+            Registros pendientes de sincronización (nuevos o editados), sin filtrar por backoff —
+            el filtrado por tiempo de reintento lo hace el motor.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.GetIdempotencyKey(`0)">
+            <summary>
+            Clave de idempotencia estable del registro (generada una sola vez al crearlo
+            localmente), enviada en cada intento de sincronización para que el backend pueda
+            detectar duplicados de forma exacta en vez de heurísticas por ventana de tiempo.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.GetAttempts(`0)">
+            <summary>
+            Número de intentos de sincronización ya realizados para este registro.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.GetLastAttempt(`0)">
+            <summary>
+            Momento del último intento de sincronización, o null si nunca se intentó.
+            Usado por el motor para calcular el backoff exponencial.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.IncrementAttemptAsync(`0)">
+            <summary>
+            Incrementa el contador de intentos y actualiza el timestamp del último intento,
+            antes de despachar la sincronización (evita reintentar de inmediato si el proceso
+            se interrumpe a mitad de la llamada HTTP).
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.MarkSyncedAsync(`0,System.String,System.Object)">
+            <summary>
+            Marca el registro como sincronizado exitosamente con el identificador del servidor.
+            extraData reenvía SyncDispatchOutcome.ExtraData tal cual, para datos adicionales
+            específicos de la app (ej. un NumeroRegistro asignado por el servidor).
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.ISyncLocalStore`1.MarkErrorAsync(`0,System.String,System.Boolean)">
+            <summary>
+            Marca el registro con un error. El motor decide, según MaxAttempts, si este error es
+            terminal (Error) o si el registro sigue pendiente para el próximo ciclo.
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Sync.OfflineSyncEngine`2">
+            <summary>
+            Motor de sincronización offline único, reemplaza los dos SyncService independientes de
+            IMGA e IMCA. Combina el guard de concurrencia real de IMGA (SemaphoreSlim no bloqueante)
+            y su estado terminal explícito, con el envío en lotes y el backoff exponencial de IMCA,
+            más una clave de idempotencia (nueva en ambas) que reemplaza tanto la dependencia de
+            IdServidor (IMGA) como la heurística de ventana ±2h (IMCA) para detectar duplicados en
+            el servidor. Cada app aporta solo: el acceso a su base local (ISyncLocalStore), el mapeo
+            local-a-DTO y el despacho HTTP real (dispatcher).
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.OfflineSyncEngine`2.#ctor(Trajano.Mobile.Shared.Sync.ISyncLocalStore{`0},System.Func{`0,`1},System.Func{System.Collections.Generic.IReadOnlyList{Trajano.Mobile.Shared.Sync.SyncDispatchItem{`0,`1}},System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Collections.Generic.IReadOnlyList{Trajano.Mobile.Shared.Sync.SyncDispatchOutcome}}},Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor,Trajano.Mobile.Shared.Logging.ISharedLogger,System.Int32,System.Int32)">
+            <param name="maxAttempts">Intentos antes de marcar el registro con estado terminal Error (IMGA usaba 3).</param>
+            <param name="batchSize">Máximo de registros despachados por llamada al dispatcher (IMCA no tenía límite).</param>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.OfflineSyncEngine`2.StartAutoSync(System.Nullable{System.TimeSpan})">
+            <summary>
+            Activa el disparo automático: evento de conectividad (primario) más un timer de
+            respaldo de bajo costo, reemplazando el timer de 5 segundos ad-hoc que tenía
+            KioscoViewModel en IMCA (el disparo primario pasa a ser reconexión, no polling).
+            Idempotente.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.OfflineSyncEngine`2.SyncPendingAsync(System.Threading.CancellationToken)">
+            <summary>
+            Ejecuta un ciclo de sincronización. No bloqueante: si ya hay una sincronización en
+            curso, retorna inmediatamente un resultado vacío (comportamiento de IMGA).
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Sync.OfflineSyncEngine`2.EstaListoParaReintento(`0)">
+            <summary>
+            Backoff exponencial (de IMCA): intento 0 siempre listo; a partir de ahí espera
+            2^intentos minutos desde el último intento (1, 2, 4, 8, 16... minutos).
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Sync.SyncItemStatus">
+            <summary>
+            Estado de sincronización de una entidad local. Generaliza el enum EstadoSync
+            de IMGA (Pendiente/Sincronizando/Sincronizado/Error/PendienteEdicion) — es el más
+            completo de las dos apps; IMCA solo tenía un bool Sincronizado sin estado terminal.
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Sync.SyncDispatchOutcome">
+            <summary>
+            Resultado de despachar un único registro al backend (éxito + id del servidor, o error).
+            </summary>
+        </member>
+        <member name="P:Trajano.Mobile.Shared.Sync.SyncDispatchOutcome.ExtraData">
+            <summary>
+            Datos adicionales devueltos por el servidor que la app necesita para actualizar su
+            entidad local (ej. IMGA también recibe un NumeroRegistro además del Id). El motor no
+            interpreta este valor, solo lo reenvía a ISyncLocalStore.MarkSyncedAsync.
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Sync.SyncDispatchItem`2">
+            <summary>
+            Un ítem local ya mapeado a su DTO remoto, con la clave de idempotencia lista para enviar.
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Sync.SyncResult">
+            <summary>
+            Resultado agregado de un ciclo de sincronización.
+            </summary>
         </member>
         <member name="T:Trajano.Mobile.Shared.Resource">
             <summary>

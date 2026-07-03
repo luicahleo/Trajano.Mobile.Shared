@@ -13,6 +13,8 @@ namespace Trajano.Mobile.Shared.Http
         private readonly ISharedLogger _logger;
         private readonly JsonSerializerOptions _jsonOptions;
 
+        public JsonSerializerOptions Options => _jsonOptions;
+
         public ApiClientBase(HttpClient httpClient, ISharedLogger logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
@@ -70,8 +72,7 @@ namespace Trajano.Mobile.Shared.Http
                 return default;
             }
 
-            string json = JsonSerializer.Serialize(data, _jsonOptions);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent content = BuildJsonContent(data);
 
             try
             {
@@ -112,8 +113,7 @@ namespace Trajano.Mobile.Shared.Http
                 return default;
             }
 
-            string json = JsonSerializer.Serialize(data, _jsonOptions);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent content = BuildJsonContent(data);
 
             try
             {
@@ -185,6 +185,50 @@ namespace Trajano.Mobile.Shared.Http
         public void ClearAuthToken()
         {
             _httpClient.DefaultRequestHeaders.Authorization = null;
+        }
+
+        public async Task<HttpResponseMessage> GetRawAsync(string endpoint, CancellationToken cancellationToken = default)
+        {
+            return await _httpClient.GetAsync(endpoint, cancellationToken);
+        }
+
+        public async Task<HttpResponseMessage> PostRawAsync<TRequest>(string endpoint, TRequest? data)
+        {
+            HttpContent? content = data == null ? null : BuildJsonContent(data);
+            return await _httpClient.PostAsync(endpoint, content);
+        }
+
+        public async Task<HttpResponseMessage> PutRawAsync<TRequest>(string endpoint, TRequest data)
+        {
+            return await _httpClient.PutAsync(endpoint, BuildJsonContent(data));
+        }
+
+        public async Task<HttpResponseMessage> DeleteRawAsync(string endpoint)
+        {
+            return await _httpClient.DeleteAsync(endpoint);
+        }
+
+        private StringContent BuildJsonContent<TRequest>(TRequest data)
+        {
+            string json = JsonSerializer.Serialize(data, _jsonOptions);
+            return new StringContent(json, Encoding.UTF8, "application/json");
+        }
+
+        public string? GetBaseUrl()
+        {
+            Uri? baseAddress = _httpClient.BaseAddress;
+            if (baseAddress == null)
+            {
+                return null;
+            }
+
+            string baseUrl = $"{baseAddress.Scheme}://{baseAddress.Host}";
+            if (!baseAddress.IsDefaultPort)
+            {
+                baseUrl += $":{baseAddress.Port}";
+            }
+
+            return baseUrl;
         }
     }
 }

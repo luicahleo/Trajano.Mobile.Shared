@@ -10,3 +10,4 @@ C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0\Traj
 C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0\refint\Trajano.Mobile.Shared.dll
 C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0\Trajano.Mobile.Shared.pdb
 C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0\ref\Trajano.Mobile.Shared.dll
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0\Trajano.Mobile.Shared.sourcelink.json

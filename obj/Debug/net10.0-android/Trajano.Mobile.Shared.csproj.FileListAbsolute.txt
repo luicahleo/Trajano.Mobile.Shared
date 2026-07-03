@@ -89,3 +89,4 @@ C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-andr
 C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-android\stamp\_CleanIntermediateIfNeeded.stamp
 C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-android\stamp\_ConvertResourcesCases.stamp
 C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-android\stamp\_ResolveLibraryProjectImports.stamp
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-android\Trajano.Mobile.Shared.sourcelink.json
