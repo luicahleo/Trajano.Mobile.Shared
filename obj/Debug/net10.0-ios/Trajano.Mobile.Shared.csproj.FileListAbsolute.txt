@@ -1,0 +1,13 @@
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\bin\Debug\net10.0-ios\Trajano.Mobile.Shared.dll
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\bin\Debug\net10.0-ios\Trajano.Mobile.Shared.pdb
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\_ProcessedBundleResourcesPath.items
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\_ProcessedContentPath.items
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.csproj.AssemblyReference.cache
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.AssemblyInfoInputs.cache
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.AssemblyInfo.cs
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.csproj.CoreCompileInputs.cache
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.dll
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\refint\Trajano.Mobile.Shared.dll
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\Trajano.Mobile.Shared.pdb
+C:\Users\lrcahuana\source\repos\dev\Trajano.Mobile.Shared\obj\Debug\net10.0-ios\ref\Trajano.Mobile.Shared.dll

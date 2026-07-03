@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Trajano.Mobile.Shared</name>
+    </assembly>
+    <members>
+        <member name="T:Trajano.Mobile.Shared.Connectivity.ConnectivityMonitor">
+            <inheritdoc cref="T:Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor"/>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor">
+            <summary>
+            Monitor de conectividad basado en eventos del sistema operativo (no en polling).
+            Reemplaza el ConnectivityService propio de IMGA (que ya tenía este diseño correcto) y
+            el chequeo inline por timer de IMCA (que solo verificaba conectividad activamente
+            dentro del ciclo de un timer de sincronización, sin reaccionar a cambios reales de red).
+            </summary>
+        </member>
+        <member name="P:Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor.TieneInternet">
+            <summary>
+            Indica si el dispositivo tiene acceso a la red en este momento.
+            </summary>
+        </member>
+        <member name="E:Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor.ConectividadCambio">
+            <summary>
+            Se dispara cuando el sistema operativo notifica un cambio de conectividad.
+            El parámetro indica si hay internet después del cambio.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor.IniciarMonitoreo">
+            <summary>
+            Comienza a escuchar los cambios de conectividad del sistema operativo.
+            Debe llamarse una vez al inicio de la app (idempotente).
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Connectivity.IConnectivityMonitor.DetenerMonitoreo">
+            <summary>
+            Deja de escuchar los cambios de conectividad (idempotente).
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Http.ApiClientBase">
+            <inheritdoc cref="T:Trajano.Mobile.Shared.Http.IApiClient"/>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Http.IApiClient">
+            <summary>
+            Cliente HTTP genérico hacia ICARUS.API. Combina la construcción de HttpClient vía
+            IHttpClientFactory (patrón correcto que ya usaba IMGA) con la capa de wrapper de
+            servicio (Get/Post/Put con manejo de errores centralizado) que ya tenía IMCA — antes
+            IMGA no tenía esta capa (cada servicio reimplementaba serialización/headers/try-catch
+            a mano) e IMCA construía su HttpClient manualmente en vez de vía factory.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Http.IApiClient.DownloadBytesAsync(System.String)">
+            <summary>
+            Descarga un recurso binario (ej. una foto) desde una URL absoluta o relativa a la
+            base configurada. Reemplaza los HttpClient ad-hoc que IMCA construía manualmente
+            en TrabajadorService/ConfiguracionViewModel solo para este propósito.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Http.IApiClient.SetAuthToken(System.String)">
+            <summary>
+            Configura el token JWT para peticiones autenticadas (header Authorization: Bearer).
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Http.IApiClient.ClearAuthToken">
+            <summary>
+            Limpia el token JWT configurado.
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Logging.ISharedLogger">
+            <summary>
+            Abstracción mínima de logging que necesitan los componentes compartidos
+            (Trajano.Mobile.Shared). IMGA e IMCA ya tienen sus propios servicios de logging con
+            nombres de métodos distintos (IEmulatorLoggingService, ILoggingService) — en vez de
+            forzar un rename en cada app, cada una registra un adaptador delgado que implementa
+            esta interfaz delegando a su logger real.
+            </summary>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Mvvm.BaseViewModel">
+            <summary>
+            Base para ViewModels que reemplaza el patrón IsLoading/ErrorMessage/HasError
+            reimplementado independientemente en 19 ViewModels de IMGA y 6 de IMCA (con nombres
+            de campo inconsistentes entre ambos: isLoading vs _isLoading). RunSafeAsync encapsula
+            el guard "if IsLoading return; ... finally IsLoading = false" que también se repetía
+            casi idéntico en cada uno.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Mvvm.BaseViewModel.ClearError">
+            <summary>
+            Limpia el estado de error sin tocar IsLoading.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Mvvm.BaseViewModel.SetError(System.String)">
+            <summary>
+            Establece el estado de error visible en la UI.
+            </summary>
+        </member>
+        <member name="M:Trajano.Mobile.Shared.Mvvm.BaseViewModel.RunSafeAsync(System.Func{System.Threading.Tasks.Task},System.Action{System.Exception})">
+            <summary>
+            Ejecuta una operación asíncrona con el guard estándar: ignora si ya hay una
+            operación en curso (IsLoading), limpia el error previo, marca IsLoading mientras
+            corre, y lo restaura al terminar (incluso si lanza una excepción no capturada por
+            el propio <paramref name="operacion"/>).
+            </summary>
+            <param name="operacion">Operación a ejecutar</param>
+            <param name="onError">
+            Callback opcional para manejar una excepción no capturada por <paramref name="operacion"/>.
+            Si no se provee, la excepción se vuelca a ErrorMessage con SetError y se traga
+            (no se relanza), igual que hacían la mayoría de los call sites que este helper reemplaza.
+            </param>
+        </member>
+        <member name="P:Trajano.Mobile.Shared.Mvvm.BaseViewModel.IsLoading">
+            <inheritdoc cref="F:Trajano.Mobile.Shared.Mvvm.BaseViewModel.isLoading"/>
+        </member>
+        <member name="P:Trajano.Mobile.Shared.Mvvm.BaseViewModel.HasError">
+            <inheritdoc cref="F:Trajano.Mobile.Shared.Mvvm.BaseViewModel.hasError"/>
+        </member>
+        <member name="P:Trajano.Mobile.Shared.Mvvm.BaseViewModel.ErrorMessage">
+            <inheritdoc cref="F:Trajano.Mobile.Shared.Mvvm.BaseViewModel.errorMessage"/>
+        </member>
+        <member name="T:Trajano.Mobile.Shared.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HasError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HasError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+    </members>
+</doc>

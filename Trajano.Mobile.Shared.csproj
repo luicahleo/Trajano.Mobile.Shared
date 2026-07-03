@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!--
+			net10.0 puro se agrega para que los proyectos de test (net10.0, sin MAUI, para
+			correr sin emulador) puedan hacer ProjectReference normal. Solo el contenido que
+			no depende de APIs de MAUI (IApiClient/ApiClientBase, BaseViewModel, la interfaz
+			IConnectivityMonitor) compila bajo ese target - ver el ItemGroup de exclusión abajo.
+			ios/maccatalyst se agregan porque IMCA los declara (aunque en esta máquina Windows
+			solo se compilan contra ref assemblies, sin empaquetar - suficiente para que el
+			ProjectReference resuelva sin error).
+		-->
+		<TargetFrameworks>net10.0;net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net10.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetPlatformMinVersion Condition="$(TargetFramework.Contains('windows'))">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('android'))">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('ios'))">15.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('maccatalyst'))">15.0</SupportedOSPlatformVersion>
+		<UseMaui Condition="'$(TargetFramework)' != 'net10.0'">true</UseMaui>
+		<SingleProject Condition="'$(TargetFramework)' != 'net10.0'">true</SingleProject>
+		<!-- No fijamos versión de Microsoft.Maui.Controls aquí: cada app consumidora (IMGA, IMCA)
+		     ya trae su propia versión via el workload MAUI, y pinnearla en esta librería
+		     provoca conflictos de "degradación de paquete" (NU1605) si difiere. -->
+		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<RootNamespace>Trajano.Mobile.Shared</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
+	</ItemGroup>
+
+	<!-- ConnectivityMonitor (implementación) usa Microsoft.Maui.Networking.Connectivity -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+		<Compile Remove="Connectivity\ConnectivityMonitor.cs" />
+	</ItemGroup>
+
+</Project>
