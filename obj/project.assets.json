@@ -8640,24 +8640,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lrcahuana\\.nuget\\packages\\": {},
+    "C:\\Users\\Usuario\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
       "projectName": "Trajano.Mobile.Shared",
-      "projectPath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
-      "packagesPath": "C:\\Users\\lrcahuana\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\obj\\",
+      "projectPath": "C:\\Users\\Usuario\\source\\repos\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Usuario\\source\\repos\\Trajano.Mobile.Shared\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\lrcahuana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
