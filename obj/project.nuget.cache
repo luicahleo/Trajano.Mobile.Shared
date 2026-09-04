@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "7Cyk3TKwLCU=",
-  "success": true,
+  "dgSpecHash": "wlVV2o32pqE=",
+  "success": false,
   "projectFilePath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\lrcahuana\\.nuget\\packages\\communitytoolkit.mvvm\\8.3.2\\communitytoolkit.mvvm.8.3.2.nupkg.sha512",
@@ -28,7 +28,7 @@
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.maui.graphics\\10.0.20\\microsoft.maui.graphics.10.0.20.nupkg.sha512",
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.maui.graphics.win2d.winui.desktop\\10.0.20\\microsoft.maui.graphics.win2d.winui.desktop.10.0.20.nupkg.sha512",
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.maui.resizetizer\\10.0.20\\microsoft.maui.resizetizer.10.0.20.nupkg.sha512",
-    "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.9\\microsoft.net.illink.tasks.10.0.9.nupkg.sha512",
+    "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.net.illink.tasks\\10.0.11\\microsoft.net.illink.tasks.10.0.11.nupkg.sha512",
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.web.webview2\\1.0.3179.45\\microsoft.web.webview2.1.0.3179.45.nupkg.sha512",
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.windows.sdk.buildtools\\10.0.22621.756\\microsoft.windows.sdk.buildtools.10.0.22621.756.nupkg.sha512",
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.windowsappsdk\\1.7.250909003\\microsoft.windowsappsdk.1.7.250909003.nupkg.sha512",
@@ -128,5 +128,31 @@
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.maccatalyst.ref.net10.0_26.0\\26.0.11017\\microsoft.maccatalyst.ref.net10.0_26.0.26.0.11017.nupkg.sha512",
     "C:\\Users\\lrcahuana\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Unable to load the service index for source https://tlmdevelopment.pkgs.visualstudio.com/_packaging/EvolutionPackageFeed/nuget/v3/index.json.\r\n  Response status code does not indicate success: 401 (Unauthorized).",
+      "projectPath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "filePath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Unable to load the service index for source https://tlmdevelopment.pkgs.visualstudio.com/_packaging/EvolutionPackageFeed/nuget/v3/index.json.\r\n  Response status code does not indicate success: 401 (Unauthorized).",
+      "projectPath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "filePath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "targetGraphs": []
+    },
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://tlmdevelopment.pkgs.visualstudio.com/_packaging/EvolutionPackageFeed/nuget/v3/index.json.",
+      "projectPath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\lrcahuana\\source\\repos\\dev\\Trajano.Mobile.Shared\\Trajano.Mobile.Shared.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
