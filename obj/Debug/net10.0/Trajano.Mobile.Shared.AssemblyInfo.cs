@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Trajano.Mobile.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06d5b6f1078000015780818d64b49cea5224f6fc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a27c9271f9fe162169423c121a12dad6f88890d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Trajano.Mobile.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Trajano.Mobile.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
